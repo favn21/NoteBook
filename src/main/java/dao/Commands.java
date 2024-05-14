@@ -1,10 +1,5 @@
 package dao;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@AllArgsConstructor
-@Getter
 public enum Commands {
     HELP("Выводит список доступных команд"),
     NOTE_NEW("Создать новую заметку"),
@@ -14,4 +9,12 @@ public enum Commands {
     EXIT("Выход из приложения");
 
     private final String description;
+
+    Commands(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

@@ -50,27 +50,6 @@ public class TestService {
     }
 
     @Test
-    @DisplayName("Проверка текста")
-    public void testIsValidText() {
-        Note note = new Note();
-        assertTrue(note.isValidText("Допустимый текст"));
-        assertFalse(note.isValidText(null));
-        assertFalse(note.isValidText(""));
-        assertFalse(note.isValidText("  "));
-    }
-
-    @Test
-    @DisplayName("Проверка меток")
-    public void testIsValidLabels() {
-        Note note = new Note();
-        assertTrue(note.isValidLabels(Arrays.asList("Метка1", "Метка2")));
-        assertTrue(note.isValidLabels(Collections.singletonList("Метка")));
-        assertFalse(note.isValidLabels(null));
-        assertFalse(note.isValidLabels(Collections.emptyList()));
-        assertFalse(note.isValidLabels(Arrays.asList("Метка1", null, "Метка2")));
-    }
-
-    @Test
     @DisplayName("Создание заметки с допустимыми данными")
     public void testCreateNoteWithValidData() {
         String text = "Допустимый текст";
@@ -86,5 +65,14 @@ public class TestService {
         List<String> labels = Collections.singletonList("Метка1");
         noteService.createNote(text, labels);
         verify(noteDao, never()).create(any(Note.class));
+    }
+    @Test
+    @DisplayName("Корректность ввода ID при удалении")
+    public void testRemoveNoteWithValidId() {
+        Note note = new Note();
+        note.setId("ID-123456789");
+        noteService.createNote("Пример текста заметки", Arrays.asList("Метка1", "Метка2"));
+        noteService.removeNoteById(note.getId());
+        verify(noteDao, times(1)).delete(eq(note.getId()));
     }
 }

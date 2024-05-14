@@ -91,6 +91,41 @@ public class NoteServiceImpl implements NoteService {
         return label != null && !label.trim().isEmpty();
     }
 
+    private void handleNoteCreation(Scanner scanner) {
+        System.out.println("Введите текст заметки:");
+        String text = scanner.nextLine();
+        System.out.println("Введите метки через запятую:");
+        String labelsInput = scanner.nextLine();
+        List<String> labels = Arrays.asList(labelsInput.split(","));
+        createNote(text, labels);
+    }
+
+    private void handleNoteListing() {
+        List<Note> allNotes = getAllNotes();
+        for (Note note : allNotes) {
+            System.out.println(note);
+        }
+    }
+
+    private void handleNoteRemoval(Scanner scanner) {
+        System.out.println("Введите id заметки для удаления:");
+        String id = scanner.nextLine();
+        removeNoteById(id);
+    }
+
+    private void handleNoteExport() {
+        String exportResult = exportNotes();
+        System.out.println(exportResult);
+    }
+
+    private void handleHelpPrinting() {
+        printHelp();
+    }
+
+    private void handleInvalidCommand() {
+        System.out.println("Неверная команда. Введите help для получения списка команд.");
+    }
+
     public void start() {
         Scanner scanner = new Scanner(System.in);
 
@@ -100,33 +135,22 @@ public class NoteServiceImpl implements NoteService {
         while (!input.equals("exit")) {
             switch (input) {
                 case "note-new":
-                    System.out.println("Введите текст заметки:");
-                    String text = scanner.nextLine();
-                    System.out.println("Введите метки через запятую:");
-                    String labelsInput = scanner.nextLine();
-                    List<String> labels = Arrays.asList(labelsInput.split(","));
-                    createNote(text, labels);
+                    handleNoteCreation(scanner);
                     break;
                 case "note-list":
-                    List<Note> allNotes = getAllNotes();
-                    for (Note note : allNotes) {
-                        System.out.println(note);
-                    }
+                    handleNoteListing();
                     break;
                 case "note-remove":
-                    System.out.println("Введите id заметки для удаления:");
-                    String id = scanner.nextLine();
-                    removeNoteById(id);
+                    handleNoteRemoval(scanner);
                     break;
                 case "note-export":
-                    String exportResult = exportNotes();
-                    System.out.println(exportResult);
+                    handleNoteExport();
                     break;
                 case "help":
-                    printHelp();
+                    handleHelpPrinting();
                     break;
                 default:
-                    System.out.println("Неверная команда. Введите help для получения списка команд.");
+                    handleInvalidCommand();
             }
 
             System.out.println("Введите следующую команду:");

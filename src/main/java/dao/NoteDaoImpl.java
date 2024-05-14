@@ -13,7 +13,25 @@ public class NoteDaoImpl implements NoteDao {
     private List<Note> noteList;
 
     private boolean isValidNote(Note note) {
-        return note != null && note.isValid();
+        return note != null && isValidText(note.getText()) && isValidLabels(note.getLabels());
+    }
+
+    private boolean isValidText(String text) {
+        return text != null && !text.trim().isEmpty() && text.length() >= 3;
+    }
+
+    private boolean isValidLabels(List<String> labels) {
+        if (labels == null || labels.isEmpty()) {
+            return false;
+        }
+
+        for (String label : labels) {
+            if (label == null || label.trim().isEmpty()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
